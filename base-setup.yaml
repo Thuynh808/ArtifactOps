@@ -50,9 +50,3 @@
       regex: '^ask_pass'
       line: ask_pass=false
     when: inventory_hostname in groups['control']
-  - name: change remote_user
-    lineinfile:
-      path: ./ansible.cfg
-      regex: '^remote_user'
-      line: remote_user=ansible
-    when: inventory_hostname in groups['control']
