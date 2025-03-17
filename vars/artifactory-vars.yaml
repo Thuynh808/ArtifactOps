@@ -1,0 +1,51 @@
+---
+artifactory_enabled: true
+postgres_enabled: true
+
+postgres_db_name: artifactory
+postgres_user: artifactory
+postgres_password: artifactory
+postgres_version: 15
+
+artifactory_systemyaml:
+  shared:
+    security:
+      joinKey: "{{ join_key }}"
+    database:
+      type: postgresql
+      driver: org.postgresql.Driver
+      url: jdbc:postgresql://127.0.0.1:5432/artifactory
+      username: artifactory
+      password: artifactory
+
+database:
+  artifactory:
+    name: artifactory
+    enabled: true
+    owner: artifactory
+    username: artifactory
+    password: artifactory
+
+artifactory_db_type: postgresql
+artifactory_db_driver: org.postgresql.Driver
+artifactory_db_name: "{{ postgres_db_name }}"
+artifactory_db_user: "{{ postgres_user }}"
+artifactory_db_password: "{{ postgres_password }}"
+artifactory_db_url: jdbc:postgresql://127.0.0.1:5432/{{ postgres_db_name }}
+
+artifactory_enabled: true
+artifactory_extra_java_opts: '-server -Xms512m -Xmx4g -Xss256k -XX:+UseG1GC -Djava.net.preferIPv4Stack=true'
+
+artifactory_repos:
+  - name: "docker-dev"
+    type: "docker"
+    description: "Docker development repository for pre-scan artifacts."
+    repo_type: "local"
+  - name: "docker-prod"
+    type: "docker"
+    description: "Production repository for approved Docker images."
+    repo_type: "local"
+  - name: "docker-quarantine"
+    type: "docker"
+    description: "Quarantine repository for failed scans."
+    repo_type: "local"
