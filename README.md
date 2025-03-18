@@ -35,4 +35,42 @@ ansible-playbook base-setup.yaml -vv
 ansible-vault create vars/secret-vars.yaml --vault-password-file ~/.vault_pass.txt
 ```
 **Copy and Paste our secret vaules into our vault file**
+<br><br>
 
+**Run `artifactory.yaml` playbook**:
+```bash
+ansible-playbook artifactory.yaml -vv
+```
+  **This playbook will**:
+  - task 1
+  - task 2
+  - task 3
+  - task 4
+
+**Verify Execution**:
+```bash
+systemctl status postgresql-15.service --no-pager
+sudo -i -u postgres psql
+\l
+\du
+\q
+systemctl status artifactory.service --no-pager
+```
+
+**Run `config.yaml` playbook**:
+```bash
+ansible-playbook config.yaml -vv
+```
+  **This playbook will**:
+  - task 1
+  - task 2
+  - task 3
+  - task 4
+
+**Verify Execution**:
+```bash
+systemctl status artifactory --no-pager
+tail /opt/jfrog/artifactory/var/log/artifactory-service.log
+tail /opt/jfrog/artifactory/var/log/router-service.log 
+tail /opt/jfrog/artifactory/var/log/metadata-service.log
+```
