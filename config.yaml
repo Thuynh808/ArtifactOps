@@ -1,0 +1,39 @@
+---
+- name: configure artifactory
+  hosts: artifactory
+  vars_files:
+    - vars/secret-vars.yml
+  tasks:
+  - name: create security directory
+    file:
+      path: "/opt/jfrog/artifactory/var/etc/security"
+      state: directory
+      owner: artifactory
+      group: artifactory
+      mode: '0700'
+  - name: create join.key file
+    copy:
+      content: "{{ join_key }}"
+      dest: "/opt/jfrog/artifactory/var/etc/security/join.key"
+      owner: artifactory
+      group: artifactory
+      mode: '0600'
+  - name: create master.key file
+    copy:
+      content: "{{ master_key }}"
+      dest: "/opt/jfrog/artifactory/var/etc/security/master.key"
+      owner: artifactory
+      group: artifactory
+      mode: '0600'
+  - name: deploy system.yaml configuration
+    template:
+      src: "system.j2"
+      dest: "/opt/jfrog/artifactory/var/etc/system.yaml"
+      owner: artifactory
+      group: artifactory
+      mode: '0644'
+  - name: restart artifactory
+    service:
+      name: artifactory.service
+      state: restarted
+      enabled: true

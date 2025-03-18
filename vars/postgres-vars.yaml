@@ -1,0 +1,30 @@
+postgres_enabled: true
+postgres_version: 15
+
+postgres_db_name: artifactory
+postgres_user: artifactory
+postgres_password: password
+
+# Artifactory Database Configuration
+database:
+  artifactory:
+    name: "artifactory"
+    username: "artifactory"
+    password: "password"
+    owner: "artifactory"
+    encoding: "UTF-8"
+    state: "present"
+    enabled: true
+    extensions:
+      - citext
+      - pgcrypto
+
+postgres_server_shared_buffers: 512MB
+postgres_server_maintenance_work_mem: 256MB
+postgres_server_effective_io_concurrency: 4
+
+postgres_server_log_checkpoints: true
+postgres_server_log_connections: true
+postgres_server_log_disconnections: true
+postgres_server_log_duration: true
+postgres_server_log_statements: "all"

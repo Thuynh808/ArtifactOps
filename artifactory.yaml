@@ -1,43 +1,16 @@
 ---
-- name: setup artifactory
+- name: install artifactory
   hosts: artifactory
   vars_files:
     - vars/secret-vars.yml
-    - vars/artifactory-vars.yaml
+    - vars/postgres-vars.yaml
 
   roles:
     - jfrog.platform.postgres
-    - jfrog.platform.artifactory
   tasks:
-    - name: Copy join key from vault to Artifactory
-      ansible.builtin.copy:
-        content: "{{ join_key }}"
-        dest: "/opt/jfrog/artifactory/var/etc/security/join.key"
-        owner: artifactory
-        group: artifactory
-        mode: '0400'
-      tags: join
-- name: create artifactory repositories
-  hosts: artifactory
-  vars_files:
-    - vars/secret-vars.yml
-    - vars/artifactory-vars.yaml
-  tasks:
-    - name: create docker repo
-      uri:
-        url: "http://localhost:8082/artifactory/api/repositories/{{ item.name }}"
-        method: PUT
-        user: admin
-        password: "{{ artifactory_admin_password }}"
-        status_code: [200, 201]
-        headers:
-          Content-Type: "application/json"
-        body_format: json
-        body: |
-          {
-            "rclass": "{{ item.repo_type }}",
-            "packageType": "{{ item.type }}",
-            "description": "{{ item.description }}"
-          }
-      loop: "{{ artifactory_repos }}"
-
+    - name: download and install artifactory
+      shell: "{{ item }}"
+      loop:
+        - 'wget https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo -O jfrog-artifactory-rpms.repo'
+        - 'mv jfrog-artifactory-rpms.repo /etc/yum.repos.d/'
+        - 'yum update -y && sudo yum install -y jfrog-artifactory-oss'  
