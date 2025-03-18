@@ -73,4 +73,6 @@ systemctl status artifactory --no-pager
 tail /opt/jfrog/artifactory/var/log/artifactory-service.log
 tail /opt/jfrog/artifactory/var/log/router-service.log 
 tail /opt/jfrog/artifactory/var/log/metadata-service.log
+ss -tlnp | grep 8082
 ```
+***OPEN FIREWALL ON NODE!***
