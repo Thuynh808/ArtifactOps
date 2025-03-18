@@ -41,6 +41,7 @@ database_artifactory_password: "<password>"
 artifactory_admin_password: "<password>"
 master_key: <master_key>
 join_key: <join_key>
+```
 
 **Run `artifactory.yaml` playbook**:
 ```bash
