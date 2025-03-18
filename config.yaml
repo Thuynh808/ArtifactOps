@@ -3,7 +3,23 @@
   hosts: artifactory
   vars_files:
     - vars/secret-vars.yml
+  vars:
+    artifactory_url: "http://{{ hostvars['node1']['ansible_host'] }}:8081/artifactory"
+    repositories:
+      - name: "docker-dev"
+        description: "Development Docker Repository"
+      - name: "docker-prod"
+        description: "Production Docker Repository"
+      - name: "docker-quarantine"
+        description: "Quarantined Docker Repository"
   tasks:
+  - name: set artifactory admin password before first login
+    copy:
+      dest: "/var/opt/jfrog/artifactory/etc/bootstrap.creds"
+      content: "admin@jfrog.com:{{ artifactory_admin_password }}"
+      owner: artifactory
+      group: artifactory
+      mode: '0600'
   - name: create security directory
     file:
       path: "/opt/jfrog/artifactory/var/etc/security"
@@ -44,55 +60,30 @@
       proto: tcp
       setype: http_port_t
       state: present
-
-- name: Create JFrog Artifactory Repositories
-  hosts: localhost
-  gather_facts: no
-  vars:
-    artifactory_url: "http://node1-ip:8081/artifactory"
-    artifactory_username: "admin"  # Change this to your Artifactory admin username
-    artifactory_password: "yourpassword"  # Change this to your password (Consider using Ansible Vault)
-    repositories:
-      - name: "docker-dev"
-        description: "Development Docker Repository"
-      - name: "docker-prod"
-        description: "Production Docker Repository"
-      - name: "docker-quarantine"
-        description: "Quarantined Docker Repository"
-
-  tasks:
-    - name: Create Artifactory repositories
-      uri:
-        url: "{{ artifactory_url }}/api/repositories/{{ item.name }}"
-        method: PUT
-        user: "{{ artifactory_username }}"
-        password: "{{ artifactory_password }}"
-        force_basic_auth: yes
-        headers:
-          Content-Type: "application/json"
-        body: |
-          {
-            "key": "{{ item.name }}",
-            "rclass": "local",
-            "packageType": "docker",
-            "description": "{{ item.description }}",
-            "dockerApiVersion": "V2",
-            "repoLayoutRef": "simple-default",
-            "handleReleases": true,
-            "handleSnapshots": true
-          }
-        body_format: json
-        status_code: [200, 201]
-      loop: "{{ repositories }}"
-      register: repo_creation
-
-    - name: Debug repository creation response
-      debug:
-        var: repo_creation
-
-
-
-
+  - name: create artifactory repositories
+    uri:
+      url: "{{ artifactory_url }}/api/repositories/{{ item.name }}"
+      method: PUT
+      user: "{{ artifactory_username }}"
+      password: "{{ artifactory_password }}"
+      force_basic_auth: yes
+      headers:
+        Content-Type: "application/json"
+      body: |
+        {
+          "key": "{{ item.name }}",
+          "rclass": "local",
+          "packageType": "docker",
+          "description": "{{ item.description }}",
+          "dockerApiVersion": "V2",
+          "repoLayoutRef": "simple-default",
+          "handleReleases": true,
+          "handleSnapshots": true
+        }
+      body_format: json
+      status_code: [200, 201]
+    loop: "{{ repositories }}"
+    register: repo_creation
   - name: restart artifactory and firewalld
     service:
       name: "{{ item }}"

@@ -34,8 +34,13 @@ ansible-playbook base-setup.yaml -vv
 ```bash
 ansible-vault create vars/secret-vars.yaml --vault-password-file ~/.vault_pass.txt
 ```
-**Copy and Paste our secret vaules into our vault file**
-<br><br>
+**Copy and Paste our secret values into our vault file**
+```bash
+postgres_password: "<password>"
+database_artifactory_password: "<password>"
+artifactory_admin_password: "<password>"
+master_key: <master_key>
+join_key: <join_key>
 
 **Run `artifactory.yaml` playbook**:
 ```bash
