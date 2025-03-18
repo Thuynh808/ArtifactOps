@@ -75,4 +75,10 @@ tail /opt/jfrog/artifactory/var/log/router-service.log
 tail /opt/jfrog/artifactory/var/log/metadata-service.log
 ss -tlnp | grep 8082
 ```
-***OPEN FIREWALL ON NODE!***
+
+**Navigate to `http://10.2.22.101:8082/ui/`**
+
+**Sign in and set new password**:
+  - Username: admin
+  - Password: password
+
