@@ -65,7 +65,7 @@
       url: "{{ artifactory_url }}/api/repositories/{{ item.name }}"
       method: PUT
       user: "{{ artifactory_username }}"
-      password: "{{ artifactory_password }}"
+      password: "{{ artifactory_admin_password }}"
       force_basic_auth: yes
       headers:
         Content-Type: "application/json"
