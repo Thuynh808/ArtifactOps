@@ -88,3 +88,4 @@ ss -tlnp | grep 8082
   - Username: admin
   - Password: password
 
+**Create repositories via web UI**
