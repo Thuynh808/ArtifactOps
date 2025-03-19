@@ -50,7 +50,7 @@
       mode: '0644'
   - name: open firewall port 8082 and 8081
     firewalld:
-      port: "{{ item }}"/tcp
+      port: "{{ item }}/tcp"
       state: enabled
       permanent: true
       immediate: true
