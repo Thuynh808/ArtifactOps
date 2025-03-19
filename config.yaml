@@ -48,6 +48,12 @@
       owner: artifactory
       group: artifactory
       mode: '0644'
+  - name: enable http in firewalld
+    firewalld:
+      service: http
+      state: enabled
+      permanent: true
+      immediate: true
   - name: open firewall port 8082 and 8081
     firewalld:
       port: "{{ item }}/tcp"
