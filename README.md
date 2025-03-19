@@ -57,9 +57,13 @@ ansible-playbook artifactory.yaml -vv
 ```bash
 systemctl status postgresql-15.service --no-pager
 sudo -i -u postgres psql
+```
+```bash
 \l
 \du
 \q
+```
+```bash
 systemctl status artifactory.service --no-pager
 ```
 
@@ -84,8 +88,21 @@ ss -tlnp | grep 8082
 
 **Navigate to `http://10.2.22.101:8082/ui/`**
 
-**Sign in and set new password**:
+**Sign in with default credentials**:
   - Username: admin
   - Password: password
+<br><br>
+
+> ⚠️ Note: Due to the limitations of JFrog Artifactory OSS, repository management via API and webhooks are not supported.
 
 **Create repositories via web UI**
+
+Since repositories must be created manually, follow these steps in the Artifactory Web UI:
+
+  - **Go to "Repositories" → "New Local Repository"**
+  - **Create these Docker repositories**:
+    - docker-dev → Development images.
+    - docker-prod → Production-ready images.
+    - docker-quarantine → Images with vulnerabilities.
+
+
