@@ -48,18 +48,24 @@
       owner: artifactory
       group: artifactory
       mode: '0644'
-  - name: open firewall port 8082
+  - name: open firewall port 8082 and 8081
     firewalld:
-      port: 8082/tcp
+      port: "{{ item }}"/tcp
       state: enabled
       permanent: true
       immediate: true
-  - name: allow selinux listen on tcp port 8082
+    loop:
+      - 8082
+      - 8081
+  - name: allow selinux listen on tcp port 8082 and 8081
     seport:
-      ports: 8082
+      ports: "{{ item }}"
       proto: tcp
       setype: http_port_t
       state: present
+    loop:
+      - 8082
+      - 8081
   - name: create artifactory repositories
     uri:
       url: "{{ artifactory_url }}/api/repositories/{{ item.name }}"
