@@ -4,7 +4,7 @@ VAULT_PASS="password"  # set your password
 POSTGRES_PW="password"  # set your password
 DB_PASSWORD="password"  # set your password
 ARTIFACTORY_ADMIN_USERNAME="admin"  # set admin usename
-ARTIFACTORY_ADMIN_PW="password"  # set your password
+ARTIFACTORY_ADMIN_PW="Cyberlab123!"  # set your password
 
 # Generate master and join keys
 MASTER_KEY=$(openssl rand -hex 32)
