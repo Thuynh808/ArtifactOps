@@ -72,6 +72,14 @@
     loop:
       - 8082
       - 8081
+  - name: restart artifactory and firewalld
+    service:
+      name: "{{ item }}"
+      state: restarted
+      enabled: true
+    loop:
+      - firewalld
+      - artifactory
   - name: create artifactory repositories
     uri:
       url: "{{ artifactory_url }}/api/repositories/{{ item.name }}"
@@ -95,12 +103,5 @@
       body_format: json
       status_code: [200, 201]
     loop: "{{ repositories }}"
-    register: repo_creation
-  - name: restart artifactory and firewalld
-    service:
-      name: "{{ item }}"
-      state: restarted
-      enabled: true
-    loop:
-      - firewalld
-      - artifactory
+  - name: verify repos
+    shell: "curl -u {{ artifactory_username }}:{{ artifactory_admin_password }} "http://node1-ip:8081/artifactory/api/repositories"
